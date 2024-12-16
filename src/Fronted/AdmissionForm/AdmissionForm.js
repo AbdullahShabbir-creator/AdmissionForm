@@ -17,6 +17,7 @@ function AdmissionForm() {
 
   const [nameSuggestions, setNameSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [submittedData, setSubmittedData] = useState(null); // State to hold submitted data
 
   // Handle input change
   const handleChange = async (e) => {
@@ -25,7 +26,7 @@ function AdmissionForm() {
       ...formData,
       [name]: value,
     });
-  
+
     // Clear errors when user changes input
     setErrors({
       ...errors,
@@ -45,7 +46,6 @@ function AdmissionForm() {
       setNameSuggestions([]); 
     }
   };
-  
 
   // Email validation
   const validateEmail = (email) => {
@@ -135,6 +135,11 @@ function AdmissionForm() {
       const result = await response.json();
       if (response.ok) {
         alert('Form submitted successfully!');
+        
+        // Store the submitted data to display it on the canvas
+        setSubmittedData(formData);
+
+        // Reset the form
         setFormData({
           fullName: '',
           email: '',
@@ -254,6 +259,20 @@ function AdmissionForm() {
           <button type="submit" className="btn btn-primary">Submit</button>
         </div>
       </form>
+
+      {submittedData && (
+        <div className="mt-4">
+          <h3>Submitted Data:</h3>
+          <div style={{padding: '10px', marginTop: '10px' }}>
+            <p><strong>Full Name:</strong><h6 className='text-center'>{submittedData.fullName}</h6></p>
+            <p><strong>Email:</strong> {submittedData.email}</p>
+            <p><strong>Phone:</strong> {submittedData.phone}</p>
+            <p><strong>Date of Birth:</strong> {submittedData.dob}</p>
+            <p><strong>Address:</strong> {submittedData.address}</p>
+            <p><strong>Course:</strong> {submittedData.course}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
